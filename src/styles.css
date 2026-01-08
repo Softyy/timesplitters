@@ -1,0 +1,82 @@
+html { scroll-behavior: smooth }
+
+:root {
+  --bg: #0f1117;
+  --surface: #151822;
+  --text: #e6e8ee;
+  --muted: #a9afc7;
+  --primary: #7c9aff;
+  --accent: #9ef1c8;
+  --line: #2a3142;
+  --shadow: 0 6px 24px rgba(0,0,0,0.3);
+}
+
+* { box-sizing: border-box }
+html, body, #root { height: 100% }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem }
+.app-header { text-align: center; margin-bottom: 1.5rem }
+.app-header h1 { margin: 0; font-size: 2rem }
+.app-header p { margin: 0.25rem 0 1rem; color: var(--muted) }
+.app-footer { text-align: center; margin-top: 3rem; color: var(--muted) }
+
+.year-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center }
+.chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.4rem 0.75rem; border-radius: 999px; text-decoration: none;
+  color: var(--text); background: #1b1f2d; border: 1px solid #23283a;
+}
+.chip:hover { border-color: var(--primary); color: var(--primary) }
+
+.year-heading {
+  margin: 2rem auto 1rem; padding: 0.25rem 0.75rem; width: fit-content;
+  background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px;
+  color: var(--muted); font-weight: 600; letter-spacing: 0.5px;
+}
+
+.timeline { position: relative; margin-top: 1rem }
+.timeline::before {
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, var(--line), #3a425a 60%, var(--line));
+  transform: translateX(-50%);
+}
+
+.timeline-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 1rem }
+
+.game-item { position: relative; max-width: 480px }
+.game-item.left { grid-column: 1; justify-self: end }
+.game-item.right { grid-column: 2; justify-self: start }
+
+.marker {
+  position: absolute; top: 1.25rem; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px rgba(158,241,200,0.15);
+}
+.game-item.left .marker { right: -8px }
+.game-item.right .marker { left: -8px }
+
+.card {
+  background: var(--surface); border: 1px solid #1e2231; border-radius: 14px;
+  padding: 1rem 1.25rem; box-shadow: var(--shadow);
+}
+.card-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem }
+.title { margin: 0; font-size: 1.1rem }
+.date { color: var(--muted) }
+.desc { margin: 0.5rem 0 0.75rem; color: var(--text) }
+
+.rating { position: relative; background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px; height: 10px }
+.rating-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--primary); border-radius: 999px }
+.rating-text { display: inline-block; margin-top: 0.4rem; color: var(--muted); font-size: 0.85rem }
+
+@media (max-width: 860px) {
+  .timeline::before { left: 24px; transform: none }
+  .timeline-list { grid-template-columns: 1fr }
+  .game-item { max-width: 100% }
+  .game-item.left, .game-item.right { grid-column: 1; justify-self: stretch }
+  .game-item .marker { left: -8px }
+}
