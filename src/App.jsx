@@ -4,8 +4,22 @@ import YearNav from './components/YearNav.jsx'
 import games from './data/games.js'
 
 export default function App() {
-  const sorted = [...games].sort((a, b) => new Date(b.date) - new Date(a.date))
-  const years = Array.from(new Set(sorted.map(g => new Date(g.date).getFullYear()))).sort((a, b) => b - a)
+  const getLatestMs = (g) => {
+    if (Array.isArray(g?.intervals) && g.intervals.length) {
+      const ends = g.intervals.map(iv => iv?.end ?? iv?.start).filter(Boolean)
+      return ends.length ? Math.max(...ends.map(d => new Date(d).getTime())) : 0
+    }
+    const arr = Array.isArray(g?.dates) && g.dates.length
+      ? g.dates
+      : (g?.date ? [g.date] : [])
+    return arr.length ? Math.max(...arr.map(d => new Date(d).getTime())) : 0
+  }
+  const sorted = [...games].sort((a, b) => getLatestMs(b) - getLatestMs(a))
+  const years = Array.from(new Set(sorted
+    .map(g => getLatestMs(g))
+    .filter(ms => ms > 0)
+    .map(ms => new Date(ms).getFullYear())
+  )).sort((a, b) => b - a)
 
   return (
     <div className="app">
@@ -25,3 +39,6 @@ export default function App() {
     </div>
   )
 }
+
+
+

@@ -67,11 +67,21 @@ body {
 .card-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem }
 .title { margin: 0; font-size: 1.1rem }
 .date { color: var(--muted) }
+.date-list { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: flex-end; }
+.date-list .date { background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px; padding: 0.15rem 0.5rem; font-size: 0.85rem; }
+.date-list .interval { background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px; padding: 0.15rem 0.5rem; font-size: 0.85rem; color: var(--muted) }
+
 .desc { margin: 0.5rem 0 0.75rem; color: var(--text) }
 
-.rating { position: relative; background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px; height: 10px }
+
+.rating { position: relative; background: #1b1f2d; border: 1px solid #23283a; border-radius: 999px; height: 10px; width: 140px }
+.rating.shuttlecock .rating-bar { background: var(--primary) }
+.rating.emzi .rating-bar { background: #f7b267 }
 .rating-bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--primary); border-radius: 999px }
-.rating-text { display: inline-block; margin-top: 0.4rem; color: var(--muted); font-size: 0.85rem }
+.rating-line { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem }
+.rating-label { color: var(--muted); font-size: 0.85rem; min-width: 44px }
+.rating-text { color: var(--muted); font-size: 0.85rem }
+
 
 @media (max-width: 860px) {
   .timeline::before { left: 24px; transform: none }

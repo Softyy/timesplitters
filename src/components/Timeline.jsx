@@ -1,9 +1,22 @@
 import React from 'react'
 import GameItem from './GameItem.jsx'
 
+function latestMs(game) {
+  if (Array.isArray(game?.intervals) && game.intervals.length) {
+    const ends = game.intervals.map(iv => iv?.end ?? iv?.start).filter(Boolean)
+    return ends.length ? Math.max(...ends.map(d => new Date(d).getTime())) : 0
+  }
+  const arr = Array.isArray(game?.dates) && game.dates.length
+    ? game.dates
+    : (game?.date ? [game.date] : [])
+  return arr.length ? Math.max(...arr.map(d => new Date(d).getTime())) : 0
+}
+
 function groupByYear(games) {
   return games.reduce((acc, g) => {
-    const y = new Date(g.date).getFullYear()
+    const ms = latestMs(g)
+    if (!ms) return acc
+    const y = new Date(ms).getFullYear()
     if (!acc[y]) acc[y] = []
     acc[y].push(g)
     return acc
@@ -21,9 +34,9 @@ export default function Timeline({ games }) {
           <h2 id={`year-${year}`} className="year-heading">{year}</h2>
           <ol className="timeline-list">
             {byYear[year]
-              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .sort((a, b) => latestMs(b) - latestMs(a))
               .map((game, idx) => (
-                <li key={`${game.title}-${game.date}-${idx}`}>
+                <li key={`${game.title}-${latestMs(game)}-${idx}`}>
                   <GameItem game={game} index={idx} />
                 </li>
               ))}
@@ -33,3 +46,6 @@ export default function Timeline({ games }) {
     </section>
   )
 }
+
+
+
