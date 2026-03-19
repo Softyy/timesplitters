@@ -1,5 +1,11 @@
 const games = [
   {
+    title: "Overcooked 2",
+    intervals: [{ start: "2026-01-06", end: "2026-03-19" }],
+    description: "Kitchen chaos, cleaner combos, and tight teamwork.",
+    ratings: { shuttlecock: 9, emzi: 9 },
+  },
+  {
     title: "Portal 2",
     intervals: [{ start: "2025-12-01", end: "2026-01-07" }],
     description: "Co-op test chambers conquered.",

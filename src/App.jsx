@@ -1,5 +1,6 @@
 import React from 'react'
 import Timeline from './components/Timeline.jsx'
+import WantToPlay from './components/WantToPlay.jsx'
 import YearNav from './components/YearNav.jsx'
 import games from './data/games.js'
 
@@ -30,15 +31,12 @@ export default function App() {
       </header>
 
       <main>
+        <WantToPlay />
         <Timeline games={sorted} />
       </main>
 
-      <footer className="app-footer">
-        <small>Made with React • Client-only</small>
-      </footer>
+      <footer className="app-footer" />
     </div>
   )
 }
-
-
 
