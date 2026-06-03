@@ -1,5 +1,11 @@
 const games = [
   {
+    title: "Slay the Spire 2",
+    intervals: [{ start: "2026-04-22", end: "2026-06-03" }],
+    description: "Ascended the spire with new characters and cards.",
+    ratings: { shuttlecock: 9, emzi: 9 },
+  },
+  {
     title: "Overcooked 2",
     intervals: [{ start: "2026-01-06", end: "2026-03-19" }],
     description: "Kitchen chaos, cleaner combos, and tight teamwork.",
