@@ -179,7 +179,7 @@ export default function WantToPlay() {
 
         <ol className="want-list">
           {items.map((game) => (
-            <li key={game.title} className="want-card" onClick={() => openWeightModal(game)}>
+            <li key={game.title} className="want-card" onClick={() => !game.fixed && openWeightModal(game)}>
               <span className="want-title">
                 {game.title}
                 {game.staple && <span className="staple-icon" aria-hidden />}
@@ -446,15 +446,27 @@ function getInitials(label) {
 
 function getEffectiveWeights(list) {
   const raw = list.map((g) => Math.max(0, Number(g.weight) || 0))
-  const stapleRaw = raw.reduce((acc, w, i) => (list[i]?.staple ? acc + w : acc), 0)
-  const nonStapleRaw = raw.reduce((acc, w, i) => (!list[i]?.staple ? acc + w : acc), 0)
-  if (!stapleRaw) return raw
-  if (!nonStapleRaw) return raw
+  const fixedFlags = list.map((g) => g.fixed != null)
+  const fixedFracs = list.map((g) => (g.fixed != null ? Math.max(0, Math.min(1, Number(g.fixed))) : 0))
+  const fixedTotal = fixedFracs.reduce((a, b) => a + b, 0)
 
-  const desiredStaple = 0.1
-  const desiredNonStaple = 0.9
-  const stapleScale = (desiredStaple / stapleRaw) * (stapleRaw + nonStapleRaw)
-  const nonStapleScale = (desiredNonStaple / nonStapleRaw) * (stapleRaw + nonStapleRaw)
+  const nonFixedRaw = raw.map((w, i) => (fixedFlags[i] ? 0 : w))
+  const stapleRaw = nonFixedRaw.reduce((acc, w, i) => (list[i]?.staple ? acc + w : acc), 0)
+  const nonStapleRaw = nonFixedRaw.reduce((acc, w, i) => (!list[i]?.staple ? acc + w : acc), 0)
 
-  return list.map((item, idx) => raw[idx] * (item.staple ? stapleScale : nonStapleScale))
+  let nonFixedWeights
+  if (!stapleRaw || !nonStapleRaw) {
+    nonFixedWeights = nonFixedRaw
+  } else {
+    const total = stapleRaw + nonStapleRaw
+    const remaining = 1 - fixedTotal
+    const stapleScale = (0.1 * remaining / stapleRaw) * total
+    const nonStapleScale = (0.9 * remaining / nonStapleRaw) * total
+    nonFixedWeights = nonFixedRaw.map((w, i) => w * (list[i].staple ? stapleScale : nonStapleScale))
+  }
+
+  const nonFixedSum = nonFixedWeights.reduce((a, b) => a + b, 0)
+  const fixedScale = fixedTotal > 0 && fixedTotal < 1 ? nonFixedSum / (1 - fixedTotal) : 0
+
+  return list.map((g, i) => (fixedFlags[i] ? fixedFracs[i] * fixedScale : nonFixedWeights[i]))
 }
